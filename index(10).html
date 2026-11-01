@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>NAGI COMPUTER STORE</title>
+<meta name="description" content="NAGI COMPUTER STORE - ຮ້ານຄອມພິວເຕີອອນລາຍ">
+<meta name="theme-color" content="#2563eb">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;700&display=swap" rel="stylesheet">
+<script>
+tailwind.config={darkMode:'class',theme:{extend:{colors:{brand:'#2563eb',brandDark:'#1d4ed8',accent:'#f97316'},fontFamily:{sans:['Noto Sans Lao','sans-serif']}}}}
+try{if(localStorage.getItem('nagi_theme')==='dark')document.documentElement.classList.add('dark')}catch(e){}
+</script>
+<style>
+::-webkit-scrollbar{display:none}
+.inp{width:100%;border:1px solid #d1d5db;border-radius:12px;padding:10px 14px;font-size:14px;margin-top:8px;outline:none;background:transparent;color:inherit}
+.inp:focus{border-color:#2563eb}
+.dark .inp{border-color:#475569}.dark .inp option{color:#111}
+.snap{scroll-snap-type:x mandatory}.snap>*{scroll-snap-align:start}
+.opt{border:2px solid #e5e7eb;border-radius:14px;padding:12px;display:flex;align-items:center;gap:12px;cursor:pointer}
+.dark .opt{border-color:#334155}
+.opt.on{border-color:#2563eb;background:rgba(37,99,235,.08)}
+.radio{width:22px;height:22px;border-radius:9999px;border:2px solid #9ca3af;flex:none;display:grid;place-items:center}
+.opt.on .radio{border-color:#2563eb}.opt.on .radio::after{content:"";width:12px;height:12px;border-radius:9999px;background:#2563eb}
+</style>
+</head>
+<body class="bg-gray-50 dark:bg-slate-900 text-gray-800 dark:text-slate-100 pb-24 md:pb-0">
+
+<header class="sticky top-0 z-40 bg-white/95 dark:bg-slate-800/95 backdrop-blur shadow-sm">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
+    <a role="button" tabindex="0" data-act="home" class="flex items-center gap-2 shrink-0">
+      <span class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand to-accent text-white grid place-items-center text-lg"><i class="fa-solid fa-laptop-code"></i></span>
+      <span class="font-black leading-tight text-sm md:text-base">NAGI<br class="md:hidden"><span class="text-brand"> COMPUTER STORE</span></span>
+    </a>
+    <div class="relative flex-1 hidden md:block">
+      <i class="fa-solid fa-magnifying-glass absolute left-4 top-3 text-gray-400"></i>
+      <input id="search" type="search" placeholder="ຄົ້ນຫາສິນຄ້າ ຍີ່ຫໍ້ ລຸ້ນ..." class="w-full bg-gray-100 dark:bg-slate-700 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none focus:ring-2 ring-brand">
+    </div>
+    <nav class="hidden md:flex items-center gap-5 text-sm font-semibold">
+      <a role="button" tabindex="0" data-act="home" class="hover:text-brand">ໜ້າຫຼັກ</a>
+      <a role="button" tabindex="0" data-act="cats" class="hover:text-brand">ໝວດໝູ່</a>
+      <a role="button" tabindex="0" data-act="wish" class="hover:text-brand">ລາຍການທີ່ມັກ</a>
+      <a role="button" tabindex="0" data-act="orders" class="hover:text-brand">ປະຫວັດ</a>
+    </nav>
+    <div class="flex items-center gap-2 ml-auto md:ml-0">
+      <button aria-label="ໂໝດມືດ/ສະຫວ່າງ" data-act="theme" class="w-9 h-9 rounded-full bg-gray-100 dark:bg-slate-700"><i id="themeIcon" class="fa-solid fa-moon"></i></button>
+      <button aria-label="ຕະກ້າ" data-act="cart" class="relative w-9 h-9 rounded-full bg-gray-100 dark:bg-slate-700"><i class="fa-solid fa-cart-shopping"></i><span id="cartBadge" class="hidden absolute -top-1 -right-1 bg-accent text-white text-[10px] min-w-[18px] h-[18px] rounded-full grid place-items-center">0</span></button>
+      <button id="btnAuth" data-act="auth" class="bg-brand text-white px-3 py-1.5 rounded-lg text-sm font-semibold">ເຂົ້າສູ່ລະບົບ</button>
+      <button id="btnReg" data-act="toSignup" class="hidden md:block border border-brand text-brand px-3 py-1.5 rounded-lg text-sm font-semibold">ສະໝັກ</button>
+    </div>
+  </div>
+  <div class="md:hidden px-4 pb-3 relative">
+    <i class="fa-solid fa-magnifying-glass absolute left-7 top-3 text-gray-400"></i>
+    <input id="searchM" type="search" placeholder="ຄົ້ນຫາສິນຄ້າ..." class="w-full bg-gray-100 dark:bg-slate-700 rounded-xl py-2.5 pl-10 pr-4 text-sm outline-none">
+  </div>
+  <div id="pills" class="max-w-6xl mx-auto px-4 pb-3 flex gap-2 overflow-x-auto"></div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 py-4 space-y-8">
+  <section id="bannerWrap" class="hidden">
+    <div id="banners" class="flex gap-3 overflow-x-auto snap pb-1"></div>
+  </section>
+  <div id="sections"><p class="text-center text-gray-400 py-10 text-sm">ກຳລັງໂຫຼດ...</p></div>
+  <footer class="text-center text-xs text-gray-400 py-6 border-t border-gray-200 dark:border-slate-700">© 2026 NAGI COMPUTER STORE</footer>
+</main>
+
+<!-- Bottom nav (mobile) -->
+<nav class="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white dark:bg-slate-800 border-t border-gray-200 dark:border-slate-700 grid grid-cols-5 pt-2 pb-[max(8px,env(safe-area-inset-bottom))]">
+  <a role="button" tabindex="0" data-nav="home" class="flex flex-col items-center text-brand"><i class="fa-solid fa-house text-lg"></i><span class="text-[10px] mt-1">ໜ້າຫຼັກ</span></a>
+  <a role="button" tabindex="0" data-nav="cats" class="flex flex-col items-center text-gray-400"><i class="fa-solid fa-table-cells-large text-lg"></i><span class="text-[10px] mt-1">ໝວດໝູ່</span></a>
+  <a role="button" tabindex="0" data-nav="cart" class="flex flex-col items-center text-gray-400 relative"><i class="fa-solid fa-cart-shopping text-lg"></i><span class="text-[10px] mt-1">ຕະກ້າ</span><span id="cartBadge2" class="hidden absolute top-0 right-5 bg-accent text-white text-[10px] min-w-[16px] h-4 rounded-full grid place-items-center">0</span></a>
+  <a role="button" tabindex="0" data-nav="wish" class="flex flex-col items-center text-gray-400"><i class="fa-solid fa-heart text-lg"></i><span class="text-[10px] mt-1">ທີ່ມັກ</span></a>
+  <a role="button" tabindex="0" data-nav="profile" class="flex flex-col items-center text-gray-400"><i class="fa-solid fa-user text-lg"></i><span class="text-[10px] mt-1">ບັນຊີຂອງຂ້ອຍ</span></a>
+</nav>
+
+<div id="sheet" class="fixed inset-0 bg-black/50 z-[60] hidden items-end md:items-center md:justify-center">
+  <div class="bg-white dark:bg-slate-800 w-full md:max-w-lg rounded-t-2xl md:rounded-2xl p-5 max-h-[88vh] overflow-y-auto">
+    <div class="flex justify-between items-center mb-3">
+      <h3 id="sheetTitle" class="font-bold text-lg"></h3>
+      <button aria-label="ປິດ" data-act="close" class="text-gray-400 text-2xl"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div id="sheetBody"></div>
+  </div>
+</div>
+<div id="toast" role="status" class="fixed top-20 left-1/2 -translate-x-1/2 z-[70] hidden px-4 py-2 rounded-lg text-sm text-white shadow-lg"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4"></script>
+<script>
+// ຄ່າ Supabase ເກົ່າ (ໂປຣເຈັກເດີມ ຮັກສາຂໍ້ມູນເກົ່າ)
+const SUPABASE_URL = 'https://rznfokqpifuzdlhszvzf.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_3V9hrnpil3u-8mp265Diww_Dc_jPnGa';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const $ = id => document.getElementById(id);
+const fmt = n => Number(n || 0).toLocaleString('en-US');
+const lak = n => fmt(n) + ' LAK';
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const dt = s => new Date(s).toLocaleString('en-GB', {dateStyle:'short', timeStyle:'short'});
+const PROVINCES = ['ນະຄອນຫຼວງວຽງຈັນ','ຜົ້ງສາລີ','ຫຼວງນ້ຳທາ','ອຸດົມໄຊ','ບໍ່ແກ້ວ','ຫຼວງພະບາງ','ຫົວພັນ','ໄຊຍະບູລີ','ຊຽງຂວາງ','ວຽງຈັນ','ບໍລິຄຳໄຊ','ຄຳມ່ວນ','ສະຫວັນນະເຂດ','ສາລະວັນ','ເຊກອງ','ຈຳປາສັກ','ອັດຕະປື','ໄຊສົມບູນ'];
+const ST = {pending:'ລໍຖ້າ', paid:'ຊຳລະແລ້ວ', shipped:'ກຳລັງຈັດສົ່ງ', done:'ສຳເລັດ', cancelled:'ຍົກເລີກ'};
+const ERR = {not_logged_in:'ກະລຸນາເຂົ້າສູ່ລະບົບ', insufficient_balance:'ຍອດເງິນບໍ່ພໍ ກະລຸນາເຕີມເງິນ', out_of_stock:'ສິນຄ້າບາງລາຍການສະຕັອກບໍ່ພໍ', product_unavailable:'ສິນຄ້າບາງລາຍການບໍ່ພ້ອມຂາຍ', address_required:'ກະລຸນາຕື່ມທີ່ຢູ່ຈັດສົ່ງໃຫ້ຄົບ', phone_required:'ກະລຸນາໃສ່ເບີໂທ', bad_company:'ບໍລິສັດຂົນສົ່ງບໍ່ຖືກຕ້ອງ', empty_cart:'ຕະກ້າຫວ່າງ'};
+const errMsg = m => { const k = Object.keys(ERR).find(k => (m||'').includes(k)); return k ? ERR[k] : 'ເກີດຂໍ້ຜິດພາດ ກະລຸນາລອງໃໝ່'; };
+
+const S = {user:null, uid:null, profile:null, products:[], cats:[], banners:[], store:null, ships:[], cat:'all', q:'', method:'shipping', company:null};
+const load = k => { try { return JSON.parse(localStorage.getItem(k)) || []; } catch { return []; } };
+const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };
+let CART = load('nagi_cart');   // [{id, qty}] — ລາຄາບໍ່ເກັບ, ດຶງຈາກ DB ທຸກຄັ້ງ
+let WISH = load('nagi_wish');   // ເກັບໃນເຄື່ອງ (localStorage) ເທົ່ານັ້ນ
+
+function toast(t, ok){
+  const el = $('toast'); el.textContent = t;
+  el.className = 'fixed top-20 left-1/2 -translate-x-1/2 z-[70] px-4 py-2 rounded-lg text-sm text-white shadow-lg ' + (ok ? 'bg-green-600' : 'bg-red-500');
+  clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.add('hidden'), 3500);
+}
+function openSheet(title, html){ $('sheetTitle').textContent = title; $('sheetBody').innerHTML = html; $('sheet').classList.remove('hidden'); $('sheet').classList.add('flex'); }
+function closeSheet(){ $('sheet').classList.add('hidden'); $('sheet').classList.remove('flex'); }
+const prod = id => S.products.find(p => p.id == id);
+
+/* ---------- Theme ---------- */
+function applyThemeIcon(){ $('themeIcon').className = 'fa-solid ' + (document.documentElement.classList.contains('dark') ? 'fa-sun' : 'fa-moon'); }
+function toggleTheme(){ const d = document.documentElement.classList.toggle('dark'); try { localStorage.setItem('nagi_theme', d ? 'dark' : 'light'); } catch {} applyThemeIcon(); }
+
+/* ---------- ຂໍ້ມູນ ---------- */
+async function loadAll(){
+  const [p, c, b, s, sh] = await Promise.all([
+    sb.from('products').select('*').order('id', {ascending:false}),
+    sb.from('categories').select('*').eq('active', true).order('sort'),
+    sb.from('banners').select('*').order('sort').order('id'),
+    sb.from('store_settings').select('*').eq('id', 1).maybeSingle(),
+    sb.from('shipping_companies').select('*').eq('active', true).order('sort')
+  ]);
+  if (p.error) { $('sections').innerHTML = '<p class="text-center text-red-500 text-sm py-10">ໂຫຼດສິນຄ້າບໍ່ໄດ້ ກະລຸນາລອງໃໝ່</p>'; return; }
+  S.products = (p.data || []).filter(x => x.active);
+  S.cats = c.error ? [] : (c.data || []);          // ຖ້າຍັງບໍ່ໄດ້ຮັນ migration => fallback
+  S.banners = (b.data || []).filter(x => x.active);
+  S.store = s.error ? null : s.data;
+  S.ships = sh.error ? [] : (sh.data || []);
+  render();
+}
+const catNames = () => S.cats.length ? S.cats.map(c => c.name) : [...new Set(S.products.map(p => p.game).filter(Boolean))];
+const catIcon = n => S.cats.find(c => c.name === n)?.icon || 'fa-microchip';
+
+function badgeOf(p){
+  if (p.stock < 1) return ['ໝົດ','bg-gray-500'];
+  if (p.old_price && p.old_price > p.price) return ['Sale','bg-red-500'];
+  if (p.badge === 'best') return ['Best Seller','bg-amber-500'];
+  if (p.badge === 'new') return ['New','bg-green-500'];
+  return null;
+}
+function card(p, wide){
+  const b = badgeOf(p), out = p.stock < 1, w = WISH.includes(p.id);
+  const off = p.old_price > p.price ? Math.round((1 - p.price / p.old_price) * 100) : 0;
+  return `<div class="${wide ? 'w-44 shrink-0 md:w-52' : ''} bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700 overflow-hidden flex flex-col">
+    <div class="relative aspect-square bg-gray-100 dark:bg-slate-700 cursor-pointer" data-view="${p.id}">
+      <img loading="lazy" src="${esc(p.image_url) || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 10 10%22%3E%3Crect width=%2210%22 height=%2210%22 fill=%22%23e5e7eb%22/%3E%3C/svg%3E'}" class="w-full h-full object-contain p-2" alt="${esc(p.name)}">
+      ${b ? `<span class="absolute top-2 left-2 ${b[1]} text-white text-[10px] font-bold px-2 py-0.5 rounded">${b[0]}${off && b[0]==='Sale' ? ' -'+off+'%' : ''}</span>` : ''}
+      <button aria-label="ມັກ" data-wish="${p.id}" class="absolute top-2 right-2 w-8 h-8 rounded-full bg-white/90 dark:bg-slate-800/90 ${w?'text-red-500':'text-gray-400'}"><i class="fa-${w?'solid':'regular'} fa-heart"></i></button>
+    </div>
+    <div class="p-3 flex flex-col flex-grow">
+      <p class="text-[11px] text-gray-400 truncate">${esc([p.brand, p.model].filter(Boolean).join(' · ') || p.game)}</p>
+      <h3 class="text-sm font-semibold line-clamp-2 min-h-[2.5rem]">${esc(p.name)}</h3>
+      <div class="mt-1"><span class="text-brand font-bold">${lak(p.price)}</span>${p.old_price > p.price ? `<div class="text-xs text-gray-400 line-through">${lak(p.old_price)}</div>` : ''}</div>
+      <p class="text-[11px] mt-1 ${out ? 'text-red-500' : 'text-green-600'}">${out ? 'ສິນຄ້າໝົດ' : 'ມີສິນຄ້າ · ເຫຼືອ ' + p.stock}</p>
+      <div class="mt-2 grid grid-cols-2 gap-2 mt-auto pt-2">
+        <button data-view="${p.id}" class="border border-brand text-brand rounded-lg py-1.5 text-xs font-semibold">ລາຍລະອຽດ</button>
+        <button ${out ? 'disabled' : ''} data-add="${p.id}" class="${out ? 'bg-gray-300' : 'bg-brand'} text-white rounded-lg py-1.5 text-xs font-semibold"><i class="fa-solid fa-cart-plus"></i> ຕະກ້າ</button>
+      </div>
+    </div></div>`;
+}
+function section(title, icon, list, carousel){
+  if (!list.length) return '';
+  return `<section><h2 class="font-bold text-lg mb-3"><i class="fa-solid ${icon} text-brand mr-1"></i>${title}</h2>` +
+    (carousel ? `<div class="flex gap-3 overflow-x-auto snap pb-2">${list.map(p => card(p, true)).join('')}</div>`
+              : `<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">${list.map(p => card(p)).join('')}</div>`) + '</section>';
+}
+function render(){
+  const pill = (v, t, ic) => `<button data-cat="${esc(v)}" class="${S.cat===v?'bg-brand text-white':'bg-gray-100 dark:bg-slate-700'} px-4 py-1.5 rounded-full text-sm whitespace-nowrap">${ic ? `<i class="fa-solid ${ic} mr-1"></i>` : ''}${esc(t)}</button>`;
+  $('pills').innerHTML = pill('all', 'ທັງໝົດ', 'fa-border-all') + catNames().map(n => pill(n, n, catIcon(n))).join('');
+  $('bannerWrap').classList.toggle('hidden', !S.banners.length || S.q || S.cat !== 'all');
+  $('banners').innerHTML = S.banners.map(b => `<div data-ban="${b.id}" class="relative shrink-0 w-[88%] md:w-[48%] h-32 md:h-44 rounded-2xl overflow-hidden text-white flex items-center p-5 bg-gradient-to-r from-brand to-indigo-600 cursor-pointer" ${b.image_url ? `style="background-image:linear-gradient(90deg,rgba(0,0,0,.55),rgba(0,0,0,.05)),url('${esc(b.image_url)}');background-size:cover;background-position:center"` : ''}><div><p class="text-xs font-semibold">${esc(b.subtitle)}</p><h2 class="text-xl md:text-3xl font-black">${esc(b.title)}</h2></div></div>`).join('');
+  const q = S.q.toLowerCase();
+  const filtered = S.products.filter(p => (S.cat === 'all' || p.game === S.cat) && [p.name, p.brand, p.model, p.game].join(' ').toLowerCase().includes(q));
+  if (S.q || S.cat !== 'all') {
+    $('sections').innerHTML = filtered.length ? `<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">${filtered.map(p => card(p)).join('')}</div>` : '<p class="text-center text-gray-400 py-10 text-sm">ບໍ່ພົບສິນຄ້າ</p>';
+  } else {
+    const L = S.products;
+    $('sections').innerHTML = (L.length ? '' : '<p class="text-center text-gray-400 py-10 text-sm">ຍັງບໍ່ມີສິນຄ້າໃນຮ້ານ</p>') +
+      section('ສິນຄ້າແນະນຳ', 'fa-star', L.filter(p => p.featured), true) +
+      section('ສິນຄ້າຂາຍດີ', 'fa-fire', L.filter(p => p.badge === 'best').concat([...L].sort((a,b) => (b.sold_count||0) - (a.sold_count||0)).filter(p => p.sold_count > 0 && p.badge !== 'best')).slice(0, 8), false) +
+      section('ສິນຄ້າມາໃໝ່', 'fa-bolt', L.filter(p => p.badge === 'new').concat(L.filter(p => p.badge !== 'new')).slice(0, 8), false) +
+      section('ສິນຄ້າລົດລາຄາ', 'fa-tags', L.filter(p => p.old_price > p.price), false);
+  }
+  updateBadges();
+}
+
+/* ---------- ລາຍລະອຽດ / ມັກ ---------- */
+function viewSheet(id){
+  const p = prod(id); if (!p) return; const out = p.stock < 1;
+  openSheet(p.name, `<img src="${esc(p.image_url)}" class="w-full max-h-64 object-contain rounded-xl bg-gray-100 dark:bg-slate-700" alt="">
+    <p class="text-xs text-gray-400 mt-3">${esc(p.game)}${p.brand ? ' · ' + esc(p.brand) : ''}${p.model ? ' · ' + esc(p.model) : ''}</p>
+    <p class="text-brand font-bold text-2xl">${lak(p.price)}</p>${p.old_price > p.price ? `<p class="text-sm text-gray-400 line-through">${lak(p.old_price)}</p>` : ''}
+    <p class="text-sm mt-2 ${out ? 'text-red-500' : 'text-green-600'}">${out ? 'ສິນຄ້າໝົດ' : 'ເຫຼືອ ' + p.stock + ' ອັນ'}</p>
+    ${p.description ? `<p class="text-sm mt-3 whitespace-pre-line">${esc(p.description)}</p>` : ''}
+    <button ${out ? 'disabled' : ''} data-add="${p.id}" class="mt-4 w-full ${out ? 'bg-gray-300' : 'bg-brand'} text-white py-2.5 rounded-xl font-semibold">ເພີ່ມໃສ່ຕະກ້າ</button>`);
+}
+function toggleWish(id){ id = Number(id); WISH = WISH.includes(id) ? WISH.filter(x => x !== id) : [...WISH, id]; save('nagi_wish', WISH); render(); }
+function wishSheet(){
+  const l = S.products.filter(p => WISH.includes(p.id));
+  openSheet('ລາຍການທີ່ມັກ', l.length ? `<div class="grid grid-cols-2 gap-3">${l.map(p => card(p)).join('')}</div><p class="text-[11px] text-gray-400 mt-3">ລາຍການທີ່ມັກເກັບໃນເຄື່ອງນີ້ເທົ່ານັ້ນ</p>` : '<p class="text-sm text-gray-400">ຍັງບໍ່ມີລາຍການທີ່ມັກ</p>');
+}
+function catsSheet(){
+  openSheet('ໝວດໝູ່ສິນຄ້າ', `<div class="grid grid-cols-2 gap-3">${catNames().map(n => `<button data-cat="${esc(n)}" class="border dark:border-slate-600 rounded-xl p-4 text-center"><i class="fa-solid ${catIcon(n)} text-brand text-2xl"></i><div class="text-sm mt-2">${esc(n)}</div></button>`).join('') || '<p class="text-sm text-gray-400">ຍັງບໍ່ມີໝວດໝູ່</p>'}</div>`);
+}
+
+/* ---------- ຕະກ້າ ---------- */
+function updateBadges(){
+  const n = CART.reduce((a, i) => a + i.qty, 0);
+  ['cartBadge','cartBadge2'].forEach(k => { $(k).textContent = n; $(k).classList.toggle('hidden', !n); });
+}
+function addCart(id){
+  const p = prod(id); if (!p || p.stock < 1) return toast('ສິນຄ້າໝົດ');
+  const it = CART.find(i => i.id == id);
+  if (it) { if (it.qty >= p.stock) return toast('ສະຕັອກມີ ' + p.stock + ' ອັນ'); it.qty++; } else CART.push({id: p.id, qty: 1});
+  save('nagi_cart', CART); updateBadges(); toast('ເພີ່ມໃສ່ຕະກ້າແລ້ວ', true);
+}
+function cartLines(){
+  CART = CART.filter(i => prod(i.id)); save('nagi_cart', CART);
+  return CART.map(i => ({...i, p: prod(i.id)}));
+}
+function totals(lines){
+  const sub = lines.reduce((a, l) => a + (l.p.old_price || l.p.price) * l.qty, 0);
+  const pay = lines.reduce((a, l) => a + l.p.price * l.qty, 0);
+  const ship = S.method === 'shipping' ? Number(S.ships.find(s => s.id == S.company)?.fee || 0) : 0;
+  return {sub, disc: sub - pay, ship, total: pay + ship};
+}
+function cartSheet(){
+  const L = cartLines();
+  if (!L.length) return openSheet('ຕະກ້າ', '<p class="text-sm text-gray-400 py-4 text-center">ຕະກ້າຫວ່າງ</p>');
+  const t = totals(L);
+  openSheet('ຕະກ້າສິນຄ້າ', L.map(l => `<div class="flex gap-3 py-3 border-b dark:border-slate-700">
+      <img src="${esc(l.p.image_url)}" class="w-16 h-16 rounded-lg object-contain bg-gray-100 dark:bg-slate-700" alt="">
+      <div class="flex-1 text-sm"><b class="line-clamp-2">${esc(l.p.name)}</b><div class="text-brand font-semibold">${lak(l.p.price)}</div>
+        <div class="flex items-center gap-2 mt-1"><button data-qty="${l.id}:-1" class="w-7 h-7 border rounded dark:border-slate-600">−</button><span>${l.qty}</span><button data-qty="${l.id}:1" class="w-7 h-7 border rounded dark:border-slate-600">+</button>
+        <button data-del="${l.id}" class="ml-auto text-red-500 text-xs"><i class="fa-solid fa-trash"></i> ລຶບ</button></div></div></div>`).join('') +
+    `<div class="mt-3 text-sm space-y-1"><div class="flex justify-between"><span>ລາຄາລວມ</span><span>${lak(t.sub)}</span></div>
+      <div class="flex justify-between text-green-600"><span>ສ່ວນຫຼຸດ</span><span>-${lak(t.disc)}</span></div>
+      <div class="flex justify-between text-gray-400"><span>ຄ່າຈັດສົ່ງ</span><span>ເລືອກຕອນ Checkout</span></div>
+      <div class="flex justify-between font-bold text-base pt-1"><span>ຍອດ (ກ່ອນຄ່າສົ່ງ)</span><span class="text-brand">${lak(t.sub - t.disc)}</span></div></div>
+    <button data-act="checkout" class="mt-4 w-full bg-brand text-white py-2.5 rounded-xl font-semibold">ໄປໜ້າ Checkout</button>`);
+}
+function qty(id, d){
+  const it = CART.find(i => i.id == id), p = prod(id); if (!it || !p) return;
+  it.qty += d; if (it.qty < 1) CART = CART.filter(i => i.id != id); else if (it.qty > p.stock) { it.qty = p.stock; toast('ສະຕັອກມີ ' + p.stock + ' ອັນ'); }
+  save('nagi_cart', CART); updateBadges(); cartSheet();
+}
+
+/* ---------- Checkout ---------- */
+function checkoutSheet(){
+  if (!S.user) return authSheet();
+  const L = cartLines(); if (!L.length) return cartSheet();
+  const st = S.store || {}, shipOk = S.ships.length > 0;
+  if (!shipOk && S.method === 'shipping') S.method = 'pickup';
+  if (S.method === 'shipping' && !S.ships.find(s => s.id == S.company)) S.company = S.ships[0]?.id ?? null;
+  const t = totals(L);
+  const opt = (k, ic, title, sub, dis) => `<div data-method="${k}" class="opt ${S.method===k?'on':''} ${dis?'opacity-50 pointer-events-none':''}"><span class="text-3xl w-10 text-center">${ic}</span><div class="flex-1"><b class="text-sm">${title}</b><div class="text-xs text-gray-500">${sub}</div></div><span class="radio"></span></div>`;
+  const ship = `
+    <p class="text-xs text-gray-500 mt-3">ເລືອກບໍລິສັດຂົນສົ່ງ</p>
+    <select id="cCo" class="inp">${S.ships.map(s => `<option value="${s.id}" ${s.id==S.company?'selected':''}>${esc(s.name)} — ${lak(s.fee)}</option>`).join('')}</select>
+    <input id="cName" class="inp" placeholder="ຊື່ຜູ້ຮັບ" value="${esc(S.profile?.full_name||'')}">
+    <input id="cPhone" class="inp" inputmode="tel" placeholder="ເບີໂທ 020XXXXXXXX">
+    <select id="cProv" class="inp"><option value="">-- ເລືອກແຂວງ --</option>${PROVINCES.map(x => `<option>${x}</option>`).join('')}</select>
+    <input id="cDist" class="inp" placeholder="ເມືອງ">
+    <textarea id="cAddr" rows="2" class="inp" placeholder="ບ້ານ ແລະທີ່ຢູ່ລະອຽດ"></textarea>`;
+  const pick = `
+    <div class="mt-3 rounded-xl border border-orange-300 bg-orange-50 dark:bg-orange-950/30 p-3 text-sm">
+      <b class="text-orange-600"><i class="fa-solid fa-location-dot"></i> ${esc(st.store_name || 'NAGI COMPUTER STORE')}</b>
+      ${st.address ? `<p class="mt-1">${esc(st.address)}</p>` : '<p class="mt-1 text-red-500 text-xs">ຍັງບໍ່ໄດ້ຕັ້ງທີ່ຢູ່ຮ້ານ (ແອດມິນຕ້ອງຕື່ມໃນ store_settings)</p>'}
+      ${st.open_hours ? `<p class="text-xs mt-1"><i class="fa-regular fa-clock"></i> ${esc(st.open_hours)}</p>` : ''}
+      ${st.phone ? `<p class="text-xs mt-1"><i class="fa-solid fa-phone"></i> ${esc(st.phone)}</p>` : ''}
+      ${/^https:\/\//.test(st.map_url || '') ? `<a href="${esc(st.map_url)}" target="_blank" rel="noopener" class="inline-block mt-2 text-brand text-xs underline"><i class="fa-solid fa-map"></i> ເປີດແຜນທີ່ Google Maps</a>` : ''}
+      <p class="mt-2 text-xs">${esc(st.pickup_note || 'ລູກຄ້າຕ້ອງມາຮັບສິນຄ້າທີ່ຮ້ານດ້ວຍຕົນເອງ')}</p>
+    </div>
+    <input id="cPhone" class="inp" inputmode="tel" placeholder="ເບີໂທຕິດຕໍ່ *">`;
+  openSheet('Checkout', `
+    ${opt('shipping','🚚','ຈັດສົ່ງຜ່ານບໍລິສັດຂົນສົ່ງ', shipOk ? 'ເລືອກບໍລິສັດ ແລະກອກທີ່ຢູ່' : 'ຍັງບໍ່ມີບໍລິສັດຂົນສົ່ງໃນລະບົບ', !shipOk)}
+    <div class="h-2"></div>
+    ${opt('pickup','🏪','ມາຮັບສິນຄ້າດ້ວຍຕົນເອງ','ຮັບທີ່ຮ້ານ · ຄ່າຈັດສົ່ງ 0 ກີບ')}
+    ${S.method === 'shipping' ? ship : pick}
+    <div class="mt-4 text-sm space-y-1 border-t dark:border-slate-700 pt-3">
+      ${L.map(l => `<div class="flex justify-between text-xs"><span class="truncate pr-2">${esc(l.p.name)} × ${l.qty}</span><span>${lak(l.p.price * l.qty)}</span></div>`).join('')}
+      <div class="flex justify-between"><span>ລາຄາລວມ</span><span>${lak(t.sub)}</span></div>
+      <div class="flex justify-between text-green-600"><span>ສ່ວນຫຼຸດ</span><span>-${lak(t.disc)}</span></div>
+      <div class="flex justify-between"><span>ຄ່າຈັດສົ່ງ</span><span>${lak(t.ship)}</span></div>
+      <div class="flex justify-between font-bold text-lg"><span>ຍອດຊຳລະສຸດທ້າຍ</span><span class="text-brand">${lak(t.total)}</span></div>
+      <p class="text-xs text-gray-500">ຊຳລະດ້ວຍຍອດເງິນໃນບັນຊີ: <b>${lak(S.profile?.balance ?? 0)}</b></p>
+    </div>
+    <button id="btnConfirm" data-act="placeOrder" class="mt-3 w-full bg-brand text-white py-3 rounded-xl font-semibold">ຢືນຢັນການສັ່ງຊື້</button>`);
+}
+async function placeOrder(){
+  const btn = $('btnConfirm'), L = cartLines(); if (!L.length) return;
+  const phone = $('cPhone').value.trim();
+  if (!phone) return toast('ກະລຸນາໃສ່ເບີໂທ');
+  let f = {name:null, prov:null, dist:null, addr:null};
+  if (S.method === 'shipping') {
+    f = {name:$('cName').value.trim(), prov:$('cProv').value, dist:$('cDist').value.trim(), addr:$('cAddr').value.trim()};
+    S.company = Number($('cCo').value);
+    if (!f.name || !f.prov || !f.dist || !f.addr) return toast('ກະລຸນາຕື່ມຂໍ້ມູນການຈັດສົ່ງໃຫ້ຄົບກ່ອນຊື້');
+  }
+  btn.disabled = true; btn.textContent = 'ກຳລັງກວດສະຕັອກ ແລະລາຄາ...';
+  // ກວດສະຕັອກ + ລາຄາຈາກ DB ອີກຄັ້ງ (server ກວດຊ້ຳໃນ RPC ເຊັ່ນກັນ)
+  const ids = L.map(l => l.id);
+  const { data: fresh, error: fe } = await sb.from('products').select('id,price,stock,active,name').in('id', ids);
+  if (fe) { btn.disabled = false; btn.textContent = 'ຢືນຢັນການສັ່ງຊື້'; return toast('ກວດສອບບໍ່ໄດ້ ກະລຸນາລອງໃໝ່'); }
+  const changed = L.filter(l => { const f2 = fresh.find(x => x.id === l.id); return !f2 || !f2.active || f2.stock < l.qty || Number(f2.price) !== Number(l.p.price); });
+  if (changed.length) { await loadAll(); btn.disabled = false; toast('ລາຄາ ຫຼື ສະຕັອກມີການປ່ຽນແປງ: ' + changed.map(c => c.p.name).join(', ') + ' — ກະລຸນາກວດຕະກ້າໃໝ່'); return cartSheet(); }
+  const { data, error } = await sb.rpc('place_order', { p_items: L.map(l => ({id: l.id, qty: l.qty})), p_method: S.method, p_company: S.method === 'shipping' ? S.company : null, p_name: f.name, p_phone: phone, p_province: f.prov, p_district: f.dist, p_address: f.addr });
+  btn.disabled = false; btn.textContent = 'ຢືນຢັນການສັ່ງຊື້';
+  if (error) return toast(errMsg(error.message));
+  CART = []; save('nagi_cart', CART);
+  openSheet('ສັ່ງຊື້ສຳເລັດ', `<p class="text-center text-4xl">✅</p><p class="text-center font-bold mt-2">ອໍເດີ #${esc(data)}</p><p class="text-center text-sm text-gray-500 mt-1">${S.method === 'pickup' ? 'ກະລຸນາມາຮັບສິນຄ້າທີ່ຮ້ານ' : 'ຮ້ານຈະຈັດສົ່ງຜ່ານບໍລິສັດຂົນສົ່ງ'}</p><button data-act="close" class="mt-4 w-full bg-brand text-white py-2.5 rounded-xl">ປິດ</button>`);
+  loadProfile(); loadAll();
+}
+
+/* ---------- ບັນຊີ ---------- */
+async function loadProfile(){
+  if (!S.user) { S.profile = null; return updateHeader(); }
+  const { data } = await sb.from('profiles').select('*').eq('id', S.user.id).single();
+  S.profile = data; updateHeader();
+}
+function updateHeader(){
+  $('btnAuth').textContent = S.profile ? fmt(S.profile.balance) + ' K' : 'ເຂົ້າສູ່ລະບົບ';
+  $('btnAuth').dataset.act = S.user ? 'profile' : 'auth';
+  $('btnReg').classList.toggle('md:block', !S.user); $('btnReg').classList.toggle('hidden', !!S.user);
+}
+function authSheet(mode='login'){
+  const su = mode === 'signup';
+  openSheet(su ? 'ສະໝັກສະມາຊິກ' : 'ເຂົ້າສູ່ລະບົບ', `
+    ${su ? '<input id="aName" class="inp" placeholder="ຊື່" autocomplete="name">' : ''}
+    <input id="aEmail" type="email" class="inp" placeholder="ອີເມວ" autocomplete="email">
+    <input id="aPass" type="password" class="inp" placeholder="ລະຫັດຜ່ານ (ຢ່າງໜ້ອຍ 8 ຕົວ)" autocomplete="${su?'new-password':'current-password'}">
+    <button data-act="${su?'doSignup':'doLogin'}" class="mt-4 w-full bg-brand text-white py-2.5 rounded-xl font-semibold">${su?'ສະໝັກ':'ເຂົ້າສູ່ລະບົບ'}</button>
+    <button data-act="${su?'toLogin':'toSignup'}" class="mt-2 w-full text-sm text-gray-500 py-2">${su?'ມີບັນຊີແລ້ວ? ເຂົ້າສູ່ລະບົບ':'ຍັງບໍ່ມີບັນຊີ? ສະໝັກສະມາຊິກ'}</button>`);
+}
+async function doLogin(){
+  const { error } = await sb.auth.signInWithPassword({ email: $('aEmail').value.trim(), password: $('aPass').value });
+  if (error) return toast(/confirm/i.test(error.message) ? 'ຍັງບໍ່ໄດ້ຢືນຢັນອີເມວ' : 'ອີເມວ ຫຼື ລະຫັດຜ່ານບໍ່ຖືກ');
+  closeSheet(); toast('ເຂົ້າສູ່ລະບົບສຳເລັດ', true);
+}
+async function doSignup(){
+  if (($('aPass').value || '').length < 8) return toast('ລະຫັດຜ່ານຢ່າງໜ້ອຍ 8 ຕົວ');
+  const { data, error } = await sb.auth.signUp({ email: $('aEmail').value.trim(), password: $('aPass').value, options:{ data:{ full_name: $('aName').value.trim() } } });
+  if (error) return toast(error.message);
+  closeSheet(); toast(data.session ? 'ສະໝັກສຳເລັດ' : 'ສະໝັກແລ້ວ! ກວດອີເມວເພື່ອຢືນຢັນ', true);
+}
+function profileSheet(){
+  if (!S.user) return authSheet();
+  openSheet('ບັນຊີຂອງຂ້ອຍ', `<p class="font-semibold">${esc(S.profile?.full_name || 'ສະມາຊິກ')}</p><p class="text-sm text-gray-500">${esc(S.user.email)}</p>
+    <p class="mt-3 text-sm">ຍອດເງິນ: <b class="text-brand">${lak(S.profile?.balance ?? 0)}</b></p>
+    <p class="text-xs text-gray-400 mt-1">ເຕີມເງິນ/ແອດມິນ: ຍັງໃຊ້ໜ້າເກົ່າ (index ເກົ່າ) ຈົນກວ່າຈະຍ້າຍໃນ Phase 5</p>
+    <button data-act="orders" class="mt-4 w-full border border-brand text-brand py-2.5 rounded-xl font-semibold">ປະຫວັດການສັ່ງຊື້</button>
+    <button data-act="logout" class="mt-2 w-full border border-red-300 text-red-500 py-2.5 rounded-xl font-semibold">ອອກຈາກລະບົບ</button>`);
+}
+async function ordersSheet(){
+  if (!S.user) return authSheet();
+  openSheet('ປະຫວັດການສັ່ງຊື້', '<p class="text-sm text-gray-400">ກຳລັງໂຫຼດ...</p>');
+  const { data, error } = await sb.from('shop_orders').select('*, shop_order_items(product_name,qty,unit_price)').eq('user_id', S.user.id).order('created_at', {ascending:false}).limit(30);
+  $('sheetBody').innerHTML = error ? '<p class="text-sm text-red-500">ໂຫຼດບໍ່ໄດ້ (ຍັງບໍ່ໄດ້ຮັນ SQL migration?)</p>' :
+    data.length ? data.map(o => `<div class="py-3 border-b dark:border-slate-700 text-sm"><div class="flex justify-between"><b>#${o.id}</b><b>${lak(o.total)}</b></div>
+      <div class="text-xs text-gray-400">${dt(o.created_at)} · ${o.delivery_method === 'pickup' ? 'ຮັບເອງ' : esc(o.shipping_company_name)} · ${ST[o.status] || esc(o.status)}</div>
+      ${(o.shop_order_items || []).map(i => `<div class="text-xs">${esc(i.product_name)} × ${i.qty}</div>`).join('')}</div>`).join('') : '<p class="text-sm text-gray-400">ຍັງບໍ່ມີການສັ່ງຊື້</p>';
+}
+
+/* ---------- Events ---------- */
+const ACT = {
+  home: () => { S.cat = 'all'; S.q = ''; $('search').value = $('searchM').value = ''; closeSheet(); render(); window.scrollTo({top:0, behavior:'smooth'}); },
+  cats: catsSheet, wish: wishSheet, cart: cartSheet, checkout: checkoutSheet, placeOrder, orders: ordersSheet, profile: profileSheet,
+  theme: toggleTheme, close: closeSheet, auth: () => authSheet(), toLogin: () => authSheet('login'), toSignup: () => authSheet('signup'), doLogin, doSignup,
+  logout: async () => { await sb.auth.signOut(); closeSheet(); toast('ອອກຈາກລະບົບແລ້ວ', true); }
+};
+document.addEventListener('click', e => {
+  const t = e.target;
+  if (t === $('sheet')) return closeSheet();
+  let m;
+  if ((m = t.closest('[data-wish]'))) return toggleWish(m.dataset.wish);
+  if ((m = t.closest('[data-add]'))) return addCart(m.dataset.add);
+  if ((m = t.closest('[data-view]'))) return viewSheet(m.dataset.view);
+  if ((m = t.closest('[data-qty]'))) { const [id, d] = m.dataset.qty.split(':'); return qty(id, Number(d)); }
+  if ((m = t.closest('[data-del]'))) { CART = CART.filter(i => i.id != m.dataset.del); save('nagi_cart', CART); updateBadges(); return cartSheet(); }
+  if ((m = t.closest('[data-method]'))) { S.method = m.dataset.method; return checkoutSheet(); }
+  if ((m = t.closest('[data-cat]'))) { S.cat = m.dataset.cat; S.q = ''; closeSheet(); render(); return window.scrollTo({top:0, behavior:'smooth'}); }
+  if ((m = t.closest('[data-ban]'))) { const b = S.banners.find(x => x.id == m.dataset.ban), g = catNames().find(n => n.toLowerCase() === String(b?.game || b?.title).toLowerCase()); if (g) { S.cat = g; render(); } return; }
+  if ((m = t.closest('[data-nav]'))) { document.querySelectorAll('[data-nav]').forEach(n => { n.classList.toggle('text-brand', n === m); n.classList.toggle('text-gray-400', n !== m); }); return ACT[m.dataset.nav]?.(); }
+  if ((m = t.closest('[data-act]')) && ACT[m.dataset.act]) ACT[m.dataset.act]();
+});
+document.addEventListener('change', e => { if (e.target.id === 'cCo') { S.company = Number(e.target.value); const keep = ['cName','cPhone','cDist','cAddr','cProv'].map(k => [k, $(k)?.value]); checkoutSheet(); keep.forEach(([k, v]) => { if ($(k) && v) $(k).value = v; }); } });
+const onSearch = e => { S.q = e.target.value; $('search').value = $('searchM').value = S.q; render(); };
+$('search').addEventListener('input', onSearch); $('searchM').addEventListener('input', onSearch);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); if (e.key === 'Enter' && e.target.matches?.('[role=button]')) e.target.click(); });
+sb.auth.onAuthStateChange((ev, session) => {
+  const uid = session?.user?.id ?? null, changed = uid !== S.uid;
+  S.user = session?.user ?? null; S.uid = uid;
+  if (!changed && ev !== 'INITIAL_SESSION') return;
+  setTimeout(() => { loadProfile(); loadAll(); }, 0);
+});
+applyThemeIcon(); updateBadges();
+</script>
+</body>
+</html>
